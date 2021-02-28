@@ -52,7 +52,7 @@
                         <td>
                     <button id="changeBookStatusButton" class="btn btn-danger .btn-sm" data-info="{{$book->id}}, {{$book->title}}" data-toggle="modal" data-target="#changeBookStatusModal">
                         <span class="fa fa-book"></span> @if(@isset($data['listType']))
-                        {{($data['listType']=="available")?'Borrow':'Return'}}
+                        {{($data['listType']=="available")?'CheckOut':'CheckIn'}}
                         @endif
                     </button>
                         </td>
@@ -73,7 +73,7 @@
           <div class="modal-content">
             <div class="modal-header">
                 @if(@isset($data['listType']))
-              <h4 class="modal-title">{{($data['listType']=="available")?'Borrow':'Return'}} Confirmation</h4>
+              <h4 class="modal-title">{{($data['listType']=="available")?'CheckOut':'CheckIn'}} Confirmation</h4>
               @endif
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -83,8 +83,8 @@
                 <form action="changeBookStatus" method="post">@csrf
                     <input id="bookId" type="hidden" name="bookId" value=""/>
                     @if(@isset($data['listType']))
-                    <input id="changeAction" type="hidden" name="changeAction" value={{($data['listType']=="available")?'CHECKED_OUT':'AVAILABLE'}} />
-              <p>Are you sure about {{($data['listType']=="available")?'borrowing':'returning'}} <span id="bookName"></span>?</p>
+                    <input id="action" type="hidden" name="action" value={{($data['listType']=="available")?'CHECKOUT':'CHECKIN'}} />
+              <p>Are you sure about {{($data['listType']=="available")?'checking out':'checking in'}} <span id="bookName"></span>?</p>
             </div>
             @endif
             <div class="modal-footer justify-content-between">

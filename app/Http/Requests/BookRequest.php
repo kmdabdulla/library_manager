@@ -24,11 +24,9 @@ class BookRequest extends FormRequest
     public function rules()
     {
             return [
-                'title' => 'required_without:bookId|string|max:255',
-                'isbn' => 'required_without:bookId|alpha_num|max:10',
-                'published_at' => 'required_without:bookId|date_format:Y-m-d|before:tomorrow',
-                'bookId' => 'required_without:title|numeric',
-                'changeAction' => 'required_without:title|string',
+                'title' => 'required|string|max:255',
+                'isbn' => 'required|alpha_num|max:10',
+                'publishedDate' => 'required|date_format:Y-m-d|before:tomorrow',
             ];
 
     }
@@ -38,9 +36,6 @@ class BookRequest extends FormRequest
         $this->merge([
             'title' => filter_var($this->title,FILTER_SANITIZE_STRING),
             'isbn' => filter_var($this->isbn,FILTER_SANITIZE_STRING),
-            'published_at' => filter_var($this->published_at,FILTER_SANITIZE_STRING),
-            'bookId' => filter_var($this->bookId,FILTER_SANITIZE_NUMBER_INT),
-            'changeAction' => filter_var($this->changeAction,FILTER_SANITIZE_STRING),
         ]);
     }
 
@@ -48,9 +43,9 @@ class BookRequest extends FormRequest
     {
         return [
             'isbn.alpha_num' => 'Invalid ISBN-10',
-            'published_at.required_without' => 'Date of publication is required',
-            'published_at.date_format' => 'Date of publication format should be YYYY-MM-DD',
-            'published_at.before' => 'Date of publication should not be greater than today',
+            'publishedDate.required' => 'Date of publication is required',
+            'publishedDate.date_format' => 'Date of publication format should be YYYY-MM-DD',
+            'publishedDate.before' => 'Date of publication should not be greater than today',
         ];
     }
 }

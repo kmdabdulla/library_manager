@@ -44,19 +44,25 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
+                <a href="addBook" class="nav-link">
+                  <i class="nav-icon far fa-circle text-info"></i>
+                  <p>Add Book</p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="listAvailableBooks" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Catalogue</p>
+                  <p>Available Books</p>
                 </a>
             </li>
             <li class="nav-item">
                 <a href="listBorrowedBooks" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
-                  <p>Books Borrowed</p>
+                  <p>Checked Out Books</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="listuserActivity" class="nav-link">
+                <a href="listUserActivity" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Activity Log</p>
                 </a>
@@ -119,5 +125,6 @@
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
 <script src="{{ asset('dist/js/bookmanager.js')}}"></script>
+<script src="{{ asset ('dist/js/addbook.js')}}"></script>
 </body>
 </html>

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\UserLogin; //This file contains request validation and sanitization logic
+use App\Http\Requests\UserLogin; //This file contains request validation and sanitization logic for user login
+use App\Http\Requests\UserRegister; //This file contains request validation and sanitization logic for user registration
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User; //Model for this controller
@@ -16,10 +17,10 @@ class LoginController extends Controller
      * Redirects to dashboard after successfull account creation.
      *
      */
-    public function registerEmail(UserLogin $request) {
+    public function registerEmail(UserRegister $request) {
         $credentials = $request->validated();
-        if(strlen($credentials['password'])<8 || !preg_match("/^(?=.*?[A-Z])(?=.*?[0-9]).*$/",$credentials['password'])) {
-            return redirect()->back()->withErrors('Password should contain at least 1 capital letter, 1 number and minimum of 8 characters');
+        if(!preg_match("/^(?=.*?[A-Z])(?=.*?[0-9]).*$/",$credentials['password'])) {
+            return redirect()->back()->withErrors("Password should contain at least 1 capital letter and 1 number");
         }
         $userexists = User::where('email', $credentials['email'])->first();
         if(!empty($userexists)) {
@@ -32,7 +33,7 @@ class LoginController extends Controller
         $user->date_of_birth = $credentials['date_of_birth'];
         $user->save();
         Auth::login($user);
-        return redirect('listBorrowedBooks');
+        return redirect('addBook');
     }
 
     /**
@@ -44,9 +45,9 @@ class LoginController extends Controller
         $request->validated();
         if (Auth::attempt($request->only('email','password'))) {
             $request->session()->regenerate();
-            return redirect('listBorrowedBooks');
+            return redirect('addBook');
         }
-            return redirect()->back()->withErrors('Invalid Credentials');
+            return redirect()->back()->withErrors('Invalid Credentials!');
     }
 
     /**

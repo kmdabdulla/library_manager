@@ -36,7 +36,7 @@
   </div>
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Login to borrow/return book</p>
+      <p class="login-box-msg">Login</p>
       <form action="emailLogin" method="post">
         <div class="input-group mb-3">
           <input type="email" name="email" class="form-control" placeholder="Email">
@@ -56,9 +56,6 @@
         </div>
         <div class="row">
             <div class="col-8">
-                <p class="mb-1">
-                    <a href="register">Create a new account?</a>
-                  </p>
             </div>
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
@@ -67,8 +64,8 @@
       </form>
       <div class="social-auth-links text-center mb-3">
         <p>- OR -</p>
-        <a href="addBook" class="btn btn-block btn-info">
-          <i class="fas fa-book mr-2"></i> Add Book to Library
+        <a href="register" class="btn btn-block btn-info">
+          <i class="fas fa-book mr-2"></i> Create a new account
         </a>
       </div>
     </div>

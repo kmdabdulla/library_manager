@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Book; //Model for this controller
 use App\Models\UserActionLogs; //Model for this controller
 use App\Http\Requests\BookRequest; //This file contains request validation and sanitization logic
+use App\Http\Requests\UserAction; //This file contains user action validation and sanitization logic
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth'); //check if user is authenticated to access this class methods.
+    }
+
     public function addBookToLibrary(BookRequest $request) {
         $inputData = $request->validated();
         if(!$this->isISBNValid($inputData['isbn'])) {
@@ -25,7 +31,7 @@ class BookController extends Controller
         $bookData = new Book;
         $bookData->title = $inputData['title'];
         $bookData->isbn = $inputData['isbn'];
-        $bookData->published_at = $inputData['published_at'];
+        $bookData->published_at = $inputData['publishedDate'];
         $bookData->status = "AVAILABLE";
         $bookData->save();
         return redirect()->back()->with('success','Book added to the library successfully');
@@ -41,14 +47,16 @@ class BookController extends Controller
         $books = DB::table('books')
         ->join('user_action_logs', function ($join) {
             $join->on('books.id', '=', 'user_action_logs.book_id')
-                 ->where([['user_action_logs.user_id', '=', Auth::user()->id],['books.status','=','CHECKED_OUT']]);
-        })->get();
+            ->where([['user_action_logs.user_id', '=', Auth::user()->id],['user_action_logs.action','=',"CHECKOUT"],['books.status','=',"CHECKED_OUT"]]);})
+            ->select('books.id','books.title', 'books.isbn', 'books.published_at')
+            ->groupBy('books.id')
+            ->get();
         $data['books'] = $books;
-        $data['listType'] = 'borrowed';
+        $data['listType'] = 'checkedOut';
         return view('listBooks')->with('data', $data);
     }
 
-    public function listuserActivity() {
+    public function listUserActivity() {
         $logs = DB::table('books')
         ->join('user_action_logs', function ($join) {
             $join->on('books.id', '=', 'user_action_logs.book_id')
@@ -60,50 +68,54 @@ class BookController extends Controller
         return view('userActivityLog')->with('logs',$logs);
     }
 
-    public function changeBookStatus(BookRequest $request) {
-        $inputData = $request->validated();
-        //Log::debug(print_r($inputData,true));
+    public function changeBookStatus(UserAction $request) {
+        $request->validated();
+        $bookId = $request->bookId;
+        $action = strtoupper($request->action);
         $response = array();
-        $bookInfo = new Book;
-        $userInfo = new UserActionLogs;
-        $bookExistsInDB = $bookInfo->where('id',$inputData['bookId'])->first();
-        if($bookExistsInDB->count()<1) {
-            $response['status'] = "danger";
+        $changeBookStatusTo = ($action=="CHECKIN") ? "AVAILABLE" : "CHECKED_OUT";
+        $book = new Book;
+        $userBook = new UserActionLogs;
+        $bookInfo = $book->where('id',$bookId)->first();
+        if($bookInfo->count()<1) {
+            $response['status'] = 'danger';
             $response['message'] = "Book does not exist";
             goto response;
         }
-        if($bookExistsInDB->status==$inputData['changeAction']) {
-            $response['status'] = "danger";
-            $response['message'] =  ($inputData['changeAction']=="AVAILABLE") ? "Book cannot be returned" : "Book cannot be borrowed";
+        if($bookInfo->status==$changeBookStatusTo) {
+            $response['status'] = 'danger';
+            $response['message'] =  ($action=="CHECKIN") ? "Book cannot be checked in!" : "Book cannot be checked out!";
             goto response;
         }
-        /*$userBookInfo = $userInfo->where([['book_id',$inputData['bookId']],['user_id',Auth::user()->id]])->latest();
-        if($userBookInfo->count()>0) {
-                $response['status'] = "danger";
-                $response['message'] = "Book cannot be returned";
+        if($action=="CHECKIN") {
+            $userBookInfo = $userBook->where([['book_id',$bookId],['user_id',Auth::user()->id],['action',"CHECKOUT"]])->latest('user_action_logs.created_at')->first();
+            if(empty($userBookInfo)) {
+                $response['status'] = 'danger';
+                $response['message'] = "Not Permitted to check in the book!";
                 goto response;
-        }*/
-        /*$currentStatus = ($inputData['changeAction']=="AVAILABLE") ? "CHECKED_OUT" : "AVAILABLE";
-        $books = DB::table('books')
-        ->join('user_action_logs', function ($join,$inputData,$currentStatus) {
-            $join->on('books.id', '=', $inputData['book_id'])
-                 ->where([['user_action_logs.user_id', '=', Auth::user()->id],['books.status','=',$currentStatus]]);
-        })->first();*/
-        $userInfo->book_id = $inputData['bookId'];
-        $userInfo->user_id = Auth::user()->id;
-        $userInfo->action = ($inputData['changeAction']=="AVAILABLE") ? "CHECKIN" : "CHECKOUT";
-        $userInfo->save();
-        $bookExistsInDB->status = $inputData['changeAction'];
-        $bookExistsInDB->save();
-        $response['status'] = "success";
-        $response['message'] = ($inputData['changeAction']=="AVAILABLE") ? "Book returned successfully" : "Book borrowed successfully";
+            }
+        }
+        $userBook->user_id = Auth::user()->id;
+        $userBook->book_id = $bookId;
+        $userBook->action = $action;
+        $userBook->save();
+        $bookInfo->status = $changeBookStatusTo;
+        $bookInfo->save();
+        $response['status'] = 'success';
+        $response['message'] = ($action=="CHECKIN") ? "Book checked in successfully!" : "Book checked out successfully!";
         response:
         return redirect()->back()->with('response',$response);
     }
 
     public function isISBNValid($isbn) {
+           if(!is_numeric(substr($isbn,0,-1))) {
+              return false;
+            }
            $isbnArray =  str_split($isbn);
            $i=10;
+           if($isbnArray[9]=='X') {
+                $isbnArray[9] = 10;
+           }
            foreach($isbnArray as $key => $val) {
                 $isbnArray[$key] = $val * $i;
                 $i--;

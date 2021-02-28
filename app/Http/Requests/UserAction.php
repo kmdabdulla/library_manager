@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserLogin extends FormRequest
+class UserAction extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,26 +23,25 @@ class UserLogin extends FormRequest
      */
     public function rules()
     {
-            return [
-                'email' => 'required|email',
-                'password' => 'required',
-            ];
-
+        return [
+            'bookId' => 'required|numeric',
+            'action' => 'required|string',
+        ];
     }
 
-    protected function prepareForValidation()
+    /*protected function prepareForValidation()
     {
         $this->merge([
-                'email' => filter_var(strtolower($this->email), FILTER_SANITIZE_EMAIL),
-            ]);
-
-    }
+            'bookId' => filter_var($this->bookId,FILTER_SANITIZE_NUMBER_INT),
+            'action' => filter_var($this->action,FILTER_SANITIZE_STRING),
+        ]);
+    }*/
 
     /*public function messages()
     {
         return [
-            'name.required' => 'Name is required',
-            'date_of_birth.required' => 'Date of Birth is required',
+            'bookId.required' => 'Book Id is required',
+            'action.required' => 'Action field is required',
         ];
     }*/
 }
