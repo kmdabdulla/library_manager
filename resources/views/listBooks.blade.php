@@ -67,7 +67,7 @@
 </div>
 @endif
 
-<!-- delete model -->
+<!-- change book status model -->
     <div class="modal fade" id="changeBookStatusModal">
         <div class="modal-dialog">
           <div class="modal-content">

@@ -1,13 +1,14 @@
 <?php
 namespace App\Http\Controllers\BookManager;
 
-use App\Models\Book; //Model for this controller
-use App\Models\UserActionLogs; //Model for this controller
+use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class BookService {
-
+     /**
+     * Handles adding book to database.
+     */
     public function addBook($bookDetails) {
         $bookData = new Book;
         $bookData->title = $bookDetails['title'];
@@ -17,7 +18,9 @@ class BookService {
         $bookData->save();
         return $bookData;
     }
-
+     /**
+     * Retrieves all books or by status.
+     */
     public function getBooks($queryData=NULL) {
         if(isset($queryData)) {
             $column = array_key_first($queryData);
@@ -27,7 +30,9 @@ class BookService {
         }
         return $books;
     }
-
+    /**
+     * Retrieves user checked out books.
+     */
     public function getUserCheckedOutBooks() {
         $books = DB::table('books')
                 ->join('user_action_logs', function ($join) {
@@ -38,7 +43,10 @@ class BookService {
                 ->get();
         return $books;
     }
-
+    /**
+     * check whether ISBN-10 is valid or not
+     * Returns true if valid, otherwise false.
+     */
     public function isISBNValid($isbn) {
         if(!is_numeric(substr($isbn,0,-1))) {
            return false;

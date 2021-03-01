@@ -27,7 +27,6 @@ class UserRegister extends FormRequest
                 'email' => 'required|email|max:255',
                 'name' => 'required|string|max:255',
                 'password' => 'required|min:8',
-                'password_confirmation' => 'sometimes|required|same:password',
                 'date_of_birth' => 'required|date_format:Y-m-d|before:tomorrow',
             ];
 

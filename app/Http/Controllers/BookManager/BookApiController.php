@@ -5,17 +5,15 @@ namespace App\Http\Controllers\BookManager;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Book; //Model for this controller
-use App\Models\UserActionLogs; //Model for this controller
 use App\Http\Requests\BookRequest; //This file contains adding book validation and sanitization logic
-use App\Http\Requests\UserAction; //This file contains user action validation and sanitization logic
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\BookManager\BookService;
-use App\Http\Controllers\BookManager\UserActionService;
 
 class BookApiController extends Controller
 {
+    /**
+     * Handles adding book to database. Performs required validation and returns relevant messages.
+     * On success, returns inserted book data.
+     */
     public function addBookToLibrary(BookRequest $request, BookService $service) {
         $inputData = $request->validated();
         if(!$service->isISBNValid($inputData['isbn'])) {
@@ -28,6 +26,11 @@ class BookApiController extends Controller
         $bookData = $service->addBook($inputData);
         return response()->json(["message"=>"Book added to the library successfully.","data"=>$bookData],'200');
     }
+    /**
+     * Handles getting books from the database.
+     * Accepts status parameter (optionally)
+     * By default, returns all the books added.
+     */
     public function getBooks(Request $request, BookService $service) {
         if($request->has('status')) {
             $inputData = $request->only('status');
@@ -45,7 +48,9 @@ class BookApiController extends Controller
         }
         return response()->json(["message"=>$books->count(). " matching record(s) found.","data"=>$books],'200');
     }
-
+    /**
+     * Retrieves book by its id.
+     */
     public function getBookDetails($bookId, BookService $service) {
         if(empty($bookId) || !is_numeric($bookId)) {
             return response()->json(["message"=>"The given data was invalid.","errors"=>["bookId"=>["Invalid Book Id"]]],'422');
@@ -57,6 +62,9 @@ class BookApiController extends Controller
         }
         return response()->json(["message"=>$books->count(). " matching record found","data"=>$books],'200');
     }
+     /**
+     * Retrieves user checked out books.
+     */
     public function getUserCheckedOutBooks(BookService $service) {
         $books = $service->getUserCheckedOutBooks();
         if($books->isEmpty()) {

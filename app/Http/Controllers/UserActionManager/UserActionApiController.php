@@ -4,18 +4,15 @@ namespace App\Http\Controllers\UserActionManager;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Book; //Model for this controller
-use App\Models\UserActionLogs; //Model for this controller
-use App\Http\Requests\BookRequest; //This file contains adding book validation and sanitization logic
 use App\Http\Requests\UserAction; //This file contains user action validation and sanitization logic
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\BookManager\BookService;
 use App\Http\Controllers\UserActionManager\UserActionService;
 
 class UserActionApiController extends Controller
 {
+    /**
+     * Retrieves all user actions.
+     * action value can be used to filter the results.
+     */
     public function getUserActions(Request $request, UserActionService $service) {
         if($request->has('action')) {
             $inputData = $request->only('action');
@@ -32,6 +29,10 @@ class UserActionApiController extends Controller
         }
         return response()->json(["message"=>$logs->count(). " matching record(s) found","data"=>$logs],'200');
     }
+    /**
+     * Performs user CHECKIN/CHECKOUT action.
+     * returns relevant message and http code.
+     */
     public function performUserAction(UserAction $request, UserActionService $service) {
         $request->validated();
         $bookId = $request->bookId;

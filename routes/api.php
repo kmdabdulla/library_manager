@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('auth:api')->group(function () {
     Route::get('book',[App\Http\Controllers\BookManager\BookApiController::class, 'getBooks']);
     Route::get('book/{id}',[App\Http\Controllers\BookManager\BookApiController::class, 'getBookDetails']);

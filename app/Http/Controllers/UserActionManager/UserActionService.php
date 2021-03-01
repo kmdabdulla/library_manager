@@ -1,14 +1,16 @@
 <?php
 namespace App\Http\Controllers\UserActionManager;
 
-use App\Models\Book; //Model for this controller
-use App\Models\UserActionLogs; //Model for this controller
+use App\Models\Book;
+use App\Models\UserActionLogs;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 
 class UserActionService {
-
+    /**
+     * Retrieves all user acton or by action
+     */
     public function getUserActions($action = NULL) {
         if(isset($action)) {
             $logs = DB::table('books')
@@ -32,7 +34,10 @@ class UserActionService {
         }
         return $logs;
     }
-
+    /**
+     * Validates and performs user CHECKIN/CHECKOUT action.
+     * returns relevant message, http code and status.
+     */
     public function performUserAction($bookId, $action) {
         $response = array();
         if($action!="CHECKIN" && $action!="CHECKOUT") {
@@ -44,7 +49,7 @@ class UserActionService {
         $book = new Book;
         $userBook = new UserActionLogs;
         $bookInfo = $book->where('id',$bookId)->first();
-        if($bookInfo->count()<1) {
+        if(empty($bookInfo)) {
             $response['status_code'] = '200';
             $response['status'] = "danger";
             $response['message'] = "Book does not exist";

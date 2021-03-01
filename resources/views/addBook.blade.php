@@ -10,8 +10,6 @@
     </div>
   </section>
   <section class="content">
-
- <!--registration dialog -->
  <div class="container-fluid">
 
     <div class="row">
@@ -39,10 +37,7 @@
             {{ session('success')}}
         </div>
     @endif
-  <!--<div class="card">
-    <div class="card-body register-card-body">
-      <p class="login-box-msg">Add book to Library</p>-->
-
+    <!-- Add Book form -->
       <form action="addBookToLibrary" method="post">
           @csrf
         <div class="input-group mb-3">
@@ -77,9 +72,6 @@
             </div>
         </div>
         </form>
-
-  <!--</div>
-</div>-->
 </div>
     </div>
 

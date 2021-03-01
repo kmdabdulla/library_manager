@@ -22,20 +22,20 @@ Route::get('/', function () {
 });
 
 //Authentication Routes
-Route::get('login', function () {
+Route::get('emailLogin', function () {
     if (Auth::check()) {
         return view('addBook');
     }
     return view('login');
 })->name('login');
-Route::get('register', function () {
+Route::get('registerEmail', function () {
     if (Auth::check()) {
         return view('addBook');
     }
     return view('register');
 });
-Route::post('registerEmail', [App\Http\Controllers\AuthManager\LoginController::class, 'register']);
-Route::post('emailLogin', [App\Http\Controllers\AuthManager\LoginController::class, 'login']);
+Route::post('register', [App\Http\Controllers\AuthManager\LoginController::class, 'register']);
+Route::post('login', [App\Http\Controllers\AuthManager\LoginController::class, 'login']);
 Route::post('logout', [App\Http\Controllers\AuthManager\LoginController::class, 'logout']);
 
 //Library Manager Book Routes

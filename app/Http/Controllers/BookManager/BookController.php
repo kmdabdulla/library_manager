@@ -3,16 +3,9 @@
 namespace App\Http\Controllers\BookManager;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Book; //Model for this controller
-use App\Models\UserActionLogs; //Model for this controller
-use App\Http\Requests\BookRequest; //This file contains request validation and sanitization logic
-use App\Http\Requests\UserAction; //This file contains user action validation and sanitization logic
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\BookRequest; //This file contains request validation and sanitization logic for Book management related requests
 use App\Http\Controllers\BookManager\BookService;
-use App\Http\Controllers\BookManager\UserActionService;
 
 class BookController extends Controller
 {
@@ -20,7 +13,10 @@ class BookController extends Controller
     {
         $this->middleware('auth'); //check if user is authenticated to access this class methods.
     }
-
+     /**
+     * Handles adding book to database. Performs required validation and returns relevant messages.
+     * On success, returns success message to the user.
+     */
     public function addBookToLibrary(BookRequest $request, BookService $service) {
         $inputData = $request->validated();
         if(!$service->isISBNValid($inputData['isbn'])) {
@@ -33,6 +29,9 @@ class BookController extends Controller
         $service->addBook($inputData);
         return redirect()->back()->with('success','Book added to the library successfully.');
     }
+     /**
+     * Returns available books to the user.
+     */
     public function getAvailableBooks(BookService $service) {
         $queryData['status'] = "AVAILABLE";
         $books = $service->getBooks($queryData);
@@ -40,7 +39,9 @@ class BookController extends Controller
         $data['listType'] = 'available';
         return view('listBooks')->with('data', $data);
     }
-
+     /**
+     * Returns user checked out books.
+     */
     public function getUserCheckedOutBooks(BookService $service) {
         $books = $service->getUserCheckedOutBooks();
         $data['books'] = $books;

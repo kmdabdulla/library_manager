@@ -37,7 +37,7 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Login</p>
-      <form action="emailLogin" method="post">
+      <form action="login" method="post">
         <div class="input-group mb-3">
           <input type="email" name="email" class="form-control" placeholder="Email">
           <div class="input-group-append">
@@ -64,7 +64,7 @@
       </form>
       <div class="social-auth-links text-center mb-3">
         <p>- OR -</p>
-        <a href="register" class="btn btn-block btn-info">
+        <a href="registerEmail" class="btn btn-block btn-info">
           <i class="fas fa-book mr-2"></i> Create a new account
         </a>
       </div>

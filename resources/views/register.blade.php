@@ -54,7 +54,7 @@
     <div class="card-body register-card-body">
       <p class="login-box-msg">New User Registration</p>
 
-      <form action="registerEmail" method="post">
+      <form action="register" method="post">
         <div class="input-group mb-3">
           <input type="text" name="name" class="form-control" placeholder="Name">
           <div class="input-group-append">
@@ -73,14 +73,6 @@
         </div>
         <div class="input-group mb-3">
           <input type="password" name="password" class="form-control" placeholder="Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="input-group mb-3">
-          <input type="password" name="password_confirmation" class="form-control" placeholder="Retype password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
