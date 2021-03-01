@@ -25,7 +25,7 @@ class BookRequest extends FormRequest
     {
             return [
                 'title' => 'required|string|max:255',
-                'isbn' => 'required|alpha_num|max:10',
+                'isbn' => 'required|alpha_num|size:10',
                 'publishedDate' => 'required|date_format:Y-m-d|before:tomorrow',
             ];
 
@@ -42,10 +42,10 @@ class BookRequest extends FormRequest
     public function messages()
     {
         return [
-            'isbn.alpha_num' => 'Invalid ISBN-10',
-            'publishedDate.required' => 'Date of publication is required',
-            'publishedDate.date_format' => 'Date of publication format should be YYYY-MM-DD',
-            'publishedDate.before' => 'Date of publication should not be greater than today',
+            'isbn.alpha_num' => 'Invalid ISBN-10.',
+            'publishedDate.required' => 'Date of publication is required.',
+            'publishedDate.date_format' => 'Date of publication format should be YYYY-MM-DD.',
+            'publishedDate.before' => 'Date of publication should not be greater than today.',
         ];
     }
 }

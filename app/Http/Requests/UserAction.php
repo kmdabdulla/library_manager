@@ -37,11 +37,11 @@ class UserAction extends FormRequest
         ]);
     }*/
 
-    /*public function messages()
+    public function messages()
     {
         return [
-            'bookId.required' => 'Book Id is required',
-            'action.required' => 'Action field is required',
+            'bookId.required' => 'The bookId field is required.',
+            'action.required' => 'The action field is required.',
         ];
-    }*/
+    }
 }

@@ -14,6 +14,5 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'registerEmail',
         'emailLogin',
-        'addBookToLibrary',
     ];
 }

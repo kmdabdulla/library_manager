@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\AuthManager;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UserLogin; //This file contains request validation and sanitization logic for user login
@@ -9,6 +10,8 @@ use App\Http\Requests\UserRegister; //This file contains request validation and 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User; //Model for this controller
+use App\Http\Controllers\AuthManager\LoginService;
+
 
 class LoginController extends Controller
 {
@@ -17,21 +20,16 @@ class LoginController extends Controller
      * Redirects to dashboard after successfull account creation.
      *
      */
-    public function registerEmail(UserRegister $request) {
+    public function register(UserRegister $request, LoginService $register) {
         $credentials = $request->validated();
         if(!preg_match("/^(?=.*?[A-Z])(?=.*?[0-9]).*$/",$credentials['password'])) {
-            return redirect()->back()->withErrors("Password should contain at least 1 capital letter and 1 number");
+            return redirect()->back()->withErrors("Password should contain at least 1 capital letter and 1 number.");
         }
         $userexists = User::where('email', $credentials['email'])->first();
         if(!empty($userexists)) {
-            return redirect()->back()->withErrors('User already exists');
+            return redirect()->back()->withErrors("User already exists.");
         }
-        $user = new User;
-        $user->name = $credentials['name'];
-        $user->email = $credentials['email'];
-        $user->password = Hash::make($credentials['password']);
-        $user->date_of_birth = $credentials['date_of_birth'];
-        $user->save();
+        $user = $register->register($credentials);
         Auth::login($user);
         return redirect('addBook');
     }
@@ -41,13 +39,13 @@ class LoginController extends Controller
      * Redirects to dashboard after successfull login.
      *
      */
-    public function emailLogin(UserLogin $request) {
+    public function login(UserLogin $request) {
         $request->validated();
         if (Auth::attempt($request->only('email','password'))) {
             $request->session()->regenerate();
             return redirect('addBook');
         }
-            return redirect()->back()->withErrors('Invalid Credentials!');
+            return redirect()->back()->withErrors('Invalid Credentials.');
     }
 
     /**
@@ -55,7 +53,7 @@ class LoginController extends Controller
      * Redirects to login screen.
      *
      */
-    public function userLogout(Request $request) {
+    public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

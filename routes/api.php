@@ -18,17 +18,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('book',[App\Http\Controllers\BookApiController::class, 'listBooks']);
-    Route::get('book/{id}',[App\Http\Controllers\BookApiController::class, 'getBookDetails']);
-    Route::get('useraction',[App\Http\Controllers\BookApiController::class,'listUserActivity']);
-    Route::get('userbooks',[App\Http\Controllers\BookApiController::class,'listUserBorrowedBooks']);
-    Route::post('useraction',[App\Http\Controllers\BookApiController::class, 'performUserAction']);
-    Route::post('book',[App\Http\Controllers\BookApiController::class, 'addBookToLibrary']);
-    Route::post('logout',[App\Http\Controllers\LoginApiController::class, 'logout']);
+    Route::get('book',[App\Http\Controllers\BookManager\BookApiController::class, 'getBooks']);
+    Route::get('book/{id}',[App\Http\Controllers\BookManager\BookApiController::class, 'getBookDetails']);
+    Route::get('userbooks',[App\Http\Controllers\BookManager\BookApiController::class,'getUserCheckedOutBooks']);
+    Route::post('book',[App\Http\Controllers\BookManager\BookApiController::class, 'addBookToLibrary']);
+    Route::get('useraction',[App\Http\Controllers\UserActionManager\UserActionApiController::class,'getUserActions']);
+    Route::post('useraction',[App\Http\Controllers\UserActionManager\UserActionApiController::class, 'performUserAction']);
+    Route::post('logout',[App\Http\Controllers\AuthManager\LoginApiController::class, 'logout']);
 });
 
-Route::post('register',[App\Http\Controllers\LoginApiController::class, 'register']);
-Route::post('login',[App\Http\Controllers\LoginApiController::class, 'login']);
+Route::post('register',[App\Http\Controllers\AuthManager\LoginApiController::class, 'register']);
+Route::post('login',[App\Http\Controllers\AuthManager\LoginApiController::class, 'login']);
 
 
 

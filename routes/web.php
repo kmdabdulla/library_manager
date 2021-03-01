@@ -34,14 +34,16 @@ Route::get('register', function () {
     }
     return view('register');
 });
-Route::post('registerEmail', [App\Http\Controllers\LoginController::class, 'registerEmail']);
-Route::post('emailLogin', [App\Http\Controllers\LoginController::class, 'emailLogin']);
-Route::post('userLogout', [App\Http\Controllers\LoginController::class, 'userLogout']);
+Route::post('registerEmail', [App\Http\Controllers\AuthManager\LoginController::class, 'register']);
+Route::post('emailLogin', [App\Http\Controllers\AuthManager\LoginController::class, 'login']);
+Route::post('logout', [App\Http\Controllers\AuthManager\LoginController::class, 'logout']);
 
-//Library Manager Routes
+//Library Manager Book Routes
 Route::view('addBook', 'addBook');
-Route::get('listBorrowedBooks',[App\Http\Controllers\BookController::class, 'listBorrowedBooks']);
-Route::get('listAvailableBooks',[App\Http\Controllers\BookController::class, 'listAvailableBooks']);
-Route::get('listUserActivity',[App\Http\Controllers\BookController::class, 'listUserActivity']);
-Route::post('addBookToLibrary',[App\Http\Controllers\BookController::class, 'addBookToLibrary']);
-Route::post('changeBookStatus',[App\Http\Controllers\BookController::class, 'changeBookStatus']);
+Route::get('getUserCheckedOutBooks',[App\Http\Controllers\BookManager\BookController::class, 'getUserCheckedOutBooks']);
+Route::get('getAvailableBooks',[App\Http\Controllers\BookManager\BookController::class, 'getAvailableBooks']);
+Route::post('addBookToLibrary',[App\Http\Controllers\BookManager\BookController::class, 'addBookToLibrary']);
+
+//Library Manager User Action Routes
+Route::get('getUserActions',[App\Http\Controllers\UserActionManager\UserActionController::class, 'getUserActions']);
+Route::post('performUserAction',[App\Http\Controllers\UserActionManager\UserActionController::class, 'performUserAction']);

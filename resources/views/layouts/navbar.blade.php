@@ -50,26 +50,26 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="listAvailableBooks" class="nav-link">
+                <a href="getAvailableBooks" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Available Books</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="listBorrowedBooks" class="nav-link">
+                <a href="getUserCheckedOutBooks" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Checked Out Books</p>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="listUserActivity" class="nav-link">
+                <a href="getUserActions" class="nav-link">
                   <i class="nav-icon far fa-circle text-info"></i>
                   <p>Activity Log</p>
                 </a>
             </li>
               <br>
           <li class="nav-item">
-            <form method="post" action="userLogout">
+            <form method="post" action="logout">
                 @csrf
               <button type="submit" class="btn btn-danger btn-block">Log Out</button>
             </form>

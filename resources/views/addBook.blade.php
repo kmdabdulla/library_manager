@@ -44,6 +44,7 @@
       <p class="login-box-msg">Add book to Library</p>-->
 
       <form action="addBookToLibrary" method="post">
+          @csrf
         <div class="input-group mb-3">
           <input type="text" name="title" class="form-control" placeholder="Title">
           <div class="input-group-append">

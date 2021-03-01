@@ -40,4 +40,14 @@ class UserRegister extends FormRequest
             ]);
 
     }
+
+    public function messages()
+    {
+        return [
+            'isbn.alpha_num' => 'Invalid ISBN-10.',
+            'date_of_birth.required' => 'Date of Birth is required.',
+            'date_of_birth.date_format' => 'Date of Birth format should be YYYY-MM-DD.',
+            'date_of_birth.before' => 'Date of Birth should not be greater than today.',
+        ];
+    }
 }

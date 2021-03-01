@@ -5,7 +5,7 @@
       <div class="row mb-2">
         <div class="col-sm-6">
             @if(@isset($data['listType']))
-          <h1>{{($data['listType']=="available")?'Available':'Borrowed'}} Books List</h1>
+          <h1>{{($data['listType']=="available")?'Available':'Checked Out'}} Books List</h1>
           @endif
         </div>
       </div>
@@ -30,7 +30,7 @@
         <div class="card">
           <div class="card-header">
             @if(@isset($data['listType']))
-            <h3 class="card-title">{{($data['listType']=="available")?'Available books in Library':'Borrowed Books from Library'}}</h3>
+            <h3 class="card-title">{{($data['listType']=="available")?'Available books in Library':'Checked Out books from Library'}}</h3>
             @endif
           </div>
           <div class="card-body table-responsive p-0" style="height: 500px;">
@@ -52,7 +52,7 @@
                         <td>
                     <button id="changeBookStatusButton" class="btn btn-danger .btn-sm" data-info="{{$book->id}}, {{$book->title}}" data-toggle="modal" data-target="#changeBookStatusModal">
                         <span class="fa fa-book"></span> @if(@isset($data['listType']))
-                        {{($data['listType']=="available")?'CheckOut':'CheckIn'}}
+                        {{($data['listType']=="available")?'Check Out':'Check In'}}
                         @endif
                     </button>
                         </td>
@@ -80,7 +80,7 @@
               </button>
             </div>
             <div class="modal-body">
-                <form action="changeBookStatus" method="post">@csrf
+                <form action="performUserAction" method="post">@csrf
                     <input id="bookId" type="hidden" name="bookId" value=""/>
                     @if(@isset($data['listType']))
                     <input id="action" type="hidden" name="action" value={{($data['listType']=="available")?'CHECKOUT':'CHECKIN'}} />
