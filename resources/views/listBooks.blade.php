@@ -50,11 +50,17 @@
                         <td>{{$book->isbn}}</td>
                         <td>{{$book->published_at}}</td>
                         <td>
-                    <button id="changeBookStatusButton" class="btn btn-danger .btn-sm" data-info="{{$book->id}}, {{$book->title}}" data-toggle="modal" data-target="#changeBookStatusModal">
+                            <div style="display:none"><form action="performUserAction" method="post">@csrf<input id="bookId" type="hidden" name="bookId" value={{$book->id}} />
+                                @if(@isset($data['listType']))
+                                <input id="action" type="hidden" name="action" value={{($data['listType']=="available")?'CHECKOUT':'CHECKIN'}} /></div><button class="btn btn-danger .btn-sm">
+                                <span class="fa fa-book"></span> {{($data['listType']=="available")?'Check Out':'Check In'}}
+                                @endif
+                            </button> </form>
+                    <!--<button id="changeBookStatusButton" class="btn btn-danger .btn-sm" data-info="{{$book->id}}, {{$book->title}}" data-toggle="modal" data-target="#changeBookStatusModal">
                         <span class="fa fa-book"></span> @if(@isset($data['listType']))
                         {{($data['listType']=="available")?'Check Out':'Check In'}}
                         @endif
-                    </button>
+                    </button>-->
                         </td>
                     </tr>
                 @endforeach
@@ -68,7 +74,7 @@
 @endif
 
 <!-- change book status model -->
-    <div class="modal fade" id="changeBookStatusModal">
+   <!-- <div class="modal fade" id="changeBookStatusModal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
@@ -93,9 +99,7 @@
             </div>
         </form>
           </div>
-          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-      </div>
+      </div>-->
 </section>
 @endsection
