@@ -3,8 +3,6 @@
 
 The application provides a basic library management service with user authentication. Currently, the application supports adding books to the library, listing the available/checked out books, check-in in/checkout functionality. The user Activity log is also available in the application. 
 
-The application can be accessed [here](https://www.books.mohamedabdulla.com).
-
 API documentation can be accessed [here](https://documenter.getpostman.com/view/14768038/TWDdkaDb).
 
 ## Built With
@@ -25,15 +23,4 @@ API documentation can be accessed [here](https://documenter.getpostman.com/view/
 6. app/Requests - This directory contains various request validators. It provides the required validation and sanitizations logic for different operations performed by the application.
 7. The different views used in the application can be found in the resources folder. 
 8. Database-related files (migrations, factories, database seeding) can be found in the database folder.
-9. Unit tests for various operations can be found in the Tests/Feature folder ("php artisan test" command can be used to quickly run the tests.). 
-
-
-## Author
-Mohamed Abdulla
-
-LinkedIn: [www.linkedin.com/in/kmdabdulla](https://www.linkedin.com/in/kmdabdulla)  
-Website: [www.mohamedabdulla.com](https://www.mohamedabdulla.com)
-
-## Acknowledgments
-* Laravel Support Forums
-* Stack OverFlow Community
+9. Unit tests for various operations can be found in the Tests/Feature folder ("php artisan test" command can be used to quickly run the tests.).
